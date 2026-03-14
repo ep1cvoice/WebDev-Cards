@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { API_URL } from '../../constants';
-
+import { useSearchParams } from 'react-router-dom';
 import QuestionCardList from '../../components/QuestionCardList';
 import { Loader } from '../../components/Loader';
 import { useFetch } from '../../hooks/useFetch';
@@ -15,6 +15,7 @@ const HomePage = () => {
 	const [filterSelectValue, setFilterSelectValue] = useState('');
 	const [page, setPage] = useState(1);
 	const [totalPages, setTotalPages] = useState(1);
+	const [searchParams] = useSearchParams();
 	const getLimit = () => {
 		if (window.innerWidth >= 1500) return 10;
 		if (window.innerWidth >= 768) return 8;
@@ -88,6 +89,14 @@ const HomePage = () => {
 		return () => window.removeEventListener('resize', handleResize);
 	}, []);
 
+	useEffect(() => {
+		const techFromUrl = searchParams.get('technology');
+
+		if (techFromUrl) {
+			setFilterSelectValue(techFromUrl);
+		}
+	}, [searchParams]);
+
 	return (
 		<>
 			<div className={styles.controlsContainer}>
@@ -95,20 +104,22 @@ const HomePage = () => {
 
 				<div className={styles.selectGroup}>
 					<select value={filterSelectValue} onChange={onFilterSelectChangeHandler} className={styles.select}>
-						<option value=''>technology</option>
+						<option value=''>Technology</option>
 						<option value='js'>Vanilla JS</option>
 						<option value='react'>React</option>
 						<option value='angular'>Angular</option>
 						<option value='vue'>Vue</option>
 						<option value='node'>Node.js</option>
 						<option value='next'>Next.js</option>
+						<option value='html'>HTML</option>
+						<option value='css'>CSS</option>
 					</select>
 					<select value={sortSelectValue} onChange={onSortSelectChangeHandler} className={styles.select}>
-						<option value=''>sort by</option>
-						<option value='level'>LVL asc</option>
-						<option value='-level'>LVL desc</option>
-						<option value='completed'>completed asc</option>
-						<option value='-completed'>not completed desc</option>
+						<option value=''>Sort By</option>
+						<option value='level'>Level ↑</option>
+						<option value='-level'>Level ↓</option>
+						<option value='completed'>Completed ↑</option>
+						<option value='-completed'>Completed ↓</option>
 					</select>
 				</div>
 			</div>
@@ -119,8 +130,8 @@ const HomePage = () => {
 				<div className={styles.noCardsWrapper}>
 					<div className={styles.noCards}>
 						<div className={styles.icon}>🔍</div>
-						<h3>No results found</h3>
-						<p>Try adjusting your search phrase.</p>
+						<h3>There is no cards here</h3>
+						<p>Create your first card using Add Button</p>
 					</div>
 				</div>
 			)}
