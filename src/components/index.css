@@ -43,6 +43,9 @@ body {
 		--btn-hover-bg: #222;
 		--btn-text-color: #fff;
 		--card-bg-color: #fff;
+		--color-green: #219679;
+		--shadow: 0 0 8px 5px rgba(0, 0, 0, 0.1);
+		--highlighted: rgba(0, 0, 0, 0.06);
 	}
 }
 
@@ -54,6 +57,9 @@ body {
 		--btn-hover-bg: #4a4e54;
 		--btn-text-color: #fff;
 		--card-bg-color: #1e293b;
+		--color-green: #219679;
+		--shadow: 0 0 8px 5px rgba(0, 0, 0, 0.1);
+		--highlighted: rgba(255, 255, 255, 0.14);
 
 	}
 }
