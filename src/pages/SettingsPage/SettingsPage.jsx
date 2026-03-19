@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { useTheme } from '../../context/ThemeContext';
 import { useRevealAnswer } from '../../context/RevealAnswerContext';
 import Button from '../../components/Button';
@@ -12,6 +13,29 @@ const SettingsPage = () => {
 	const { theme, setTheme } = useTheme();
 	const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
 	const { revealMode, setRevealMode } = useRevealAnswer();
+	const [showModal, setShowModal] = useState(false);
+	const [confirmText, setConfirmText] = useState('');
+
+	const handleDeleteAll = async () => {
+		try {
+			const res = await fetch('http://localhost:8800/checkycards');
+			const cards = await res.json();
+
+			await Promise.all(
+				cards.map((card) =>
+					fetch(`http://localhost:8800/checkycards/${card.id}`, {
+						method: 'DELETE',
+					}),
+				),
+			);
+
+			setShowModal(false);
+			setConfirmText('');
+
+		} catch (err) {
+			console.error(err);
+		}
+	};
 
 	return (
 		<>
@@ -85,12 +109,42 @@ const SettingsPage = () => {
 							<p className={styles.subText}>This action cannot be undone.</p>
 						</div>
 
-						<button className={styles.dangerButton} onClick={() => console.log('delete all')}>
+						<button className={styles.dangerButton} onClick={() => setShowModal(true)}>
 							Delete All
 						</button>
 					</div>
 				</div>
 			</div>
+
+			{showModal && (
+				<div className={styles.modalOverlay}>
+					<div className={styles.modal}>
+
+						<h3 className={styles.modalTitle}>Confirm deletion</h3>
+						<p>
+							Type <b>Yes, delete all cards</b> to confirm.
+						</p>
+
+						<input
+							type='text'
+							value={confirmText}
+							onChange={(e) => setConfirmText(e.target.value)}
+							className={styles.modalInput}
+							/>
+
+						<div className={styles.modalActions}>
+							<button onClick={() => setShowModal(false)}>Cancel</button>
+
+							<button
+								className={styles.dangerButton}
+								disabled={confirmText !== 'Yes, delete all cards'}
+								onClick={handleDeleteAll}>
+								Delete
+							</button>
+						</div>
+					</div>
+				</div>
+			)}
 		</>
 	);
 };
