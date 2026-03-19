@@ -91,6 +91,48 @@
 	cursor: not-allowed;
 }
 
+.dangerSection {
+	margin-top: 20px;
+}
+
+.dangerTitle {
+	font-size: 16px;
+	font-weight: 600;
+	color: #ff4d4f;
+	margin-bottom: 10px;
+	margin-left: 20px;
+}
+
+.dangerBox {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 10px;
+
+	padding: 20px;
+	border-radius: 12px;
+
+	background-color: rgba(255, 77, 79, 0.08);
+	border: 1px solid rgba(255, 77, 79, 0.3);
+}
+
+.dangerButton {
+	padding: 10px 16px;
+	border-radius: 10px;
+	border: none;
+
+	background-color: #ff4d4f;
+	color: white;
+	font-weight: 600;
+
+	cursor: pointer;
+	transition: 0.2s ease;
+}
+
+.dangerButton:hover {
+	background-color: #d9363e;
+}
+
 @media (max-width: 600px) {
 	.row {
 		flex-direction: column;

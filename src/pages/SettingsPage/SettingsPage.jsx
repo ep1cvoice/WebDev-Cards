@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
+import { useRevealAnswer } from '../../context/RevealAnswerContext';
 import Button from '../../components/Button';
 import Switch from 'react-switch';
 
@@ -8,10 +9,9 @@ import styles from './SettingsPage.module.css';
 
 const SettingsPage = () => {
 	const navigate = useNavigate();
-
 	const { theme, setTheme } = useTheme();
-
 	const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+	const { revealMode, setRevealMode } = useRevealAnswer();
 
 	return (
 		<>
@@ -65,17 +65,29 @@ const SettingsPage = () => {
 				<div className={styles.section}>
 					<div className={styles.row}>
 						<p className={styles.infoTitle}>Hover / Click to reveal answer</p>
+					</div>
 
-						<Switch
-							checked={isDark}
-							onChange={(checked) => setTheme(checked ? 'dark' : 'light')}
-							offColor='#383b3f'
-							onColor='#219679'
-							uncheckedIcon={false}
-							checkedIcon={false}
-							height={20}
-							width={40}
-						/>
+					<div className={styles.modeSelector}>
+						<button className={revealMode === 'hover' ? styles.active : ''} onClick={() => setRevealMode('hover')}>
+							Hover
+						</button>
+
+						<button className={revealMode === 'click' ? styles.active : ''} onClick={() => setRevealMode('click')}>
+							Click
+						</button>
+					</div>
+				</div>
+				<div className={styles.dangerSection}>
+					<p className={styles.dangerTitle}>Danger Zone</p>
+					<div className={styles.dangerBox}>
+						<div>
+							<p className={styles.infoTitle}>Delete all cards</p>
+							<p className={styles.subText}>This action cannot be undone.</p>
+						</div>
+
+						<button className={styles.dangerButton} onClick={() => console.log('delete all')}>
+							Delete All
+						</button>
 					</div>
 				</div>
 			</div>
